@@ -38,11 +38,11 @@ HashMap::HashMap(size_t size) {
     this->global_size = size;
     number_of_ranks = upcxx::rank_n();
     my_rank =  upcxx::rank_me();
-    offset = (global_size + number_of_ranks - 1) / number_of_ranks;
+    offset = (global_size-1) / number_of_ranks + 1;
     start_position = offset * my_rank;
     my_size = offset;
     if (my_rank == number_of_ranks - 1) {
-        my_size = global_size - (number_of_ranks - 1) * offset;
+        my_size = global_size - (number_of_ranks-1) * offset;
     }
     global_data = std::vector<upcxx::global_ptr<kmer_pair>> (number_of_ranks);
     global_used = std::vector<upcxx::global_ptr<int>> (number_of_ranks);
